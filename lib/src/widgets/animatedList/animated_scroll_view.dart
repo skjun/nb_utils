@@ -25,11 +25,7 @@ class AnimatedScrollView extends StatefulWidget {
 
   final VoidCallback? onNextPage;
   final VoidCallback? onPageScrollChange;
-  final CrossAxisAlignment crossAxisAlignment;
-  final MainAxisSize mainAxisSize;
-
-  final RefreshCallback? onSwipeRefresh;
-  final bool disposeScrollController;
+  final bool isLastPage;
 
   AnimatedScrollView({
     Key? key,
@@ -50,10 +46,7 @@ class AnimatedScrollView extends StatefulWidget {
     this.flipConfiguration,
     this.onNextPage,
     this.onPageScrollChange,
-    this.crossAxisAlignment = CrossAxisAlignment.start,
-    this.mainAxisSize = MainAxisSize.max,
-    this.onSwipeRefresh,
-    this.disposeScrollController = true,
+    this.isLastPage = false,
   }) : super(key: key);
 
   @override
@@ -80,12 +73,16 @@ class _AnimatedScrollViewState extends State<AnimatedScrollView> {
       /// Enable Pagination
 
       scrollController!.addListener(() {
-        if (scrollController!.position.maxScrollExtent ==
-            scrollController!.offset) {
-          widget.onNextPage?.call();
+        if (!widget.isLastPage) {
+          if (scrollController!.position.maxScrollExtent ==
+              scrollController!.offset) {
+            widget.onNextPage?.call();
+          }
         }
 
-        widget.onPageScrollChange?.call();
+        if (widget.onPageScrollChange != null) {
+          widget.onPageScrollChange!.call();
+        }
       });
     }
   }
@@ -94,10 +91,11 @@ class _AnimatedScrollViewState extends State<AnimatedScrollView> {
   void dispose() {
     super.dispose();
 
-    if (widget.disposeScrollController) scrollController?.dispose();
+    scrollController?.dispose();
   }
 
-  Widget _widget() {
+  @override
+  Widget build(BuildContext context) {
     return AnimationLimiterWidget(
       child: SingleChildScrollView(
         controller: scrollController,
@@ -111,8 +109,7 @@ class _AnimatedScrollViewState extends State<AnimatedScrollView> {
         restorationId: widget.restorationId,
         reverse: widget.reverse,
         child: Column(
-          mainAxisSize: widget.mainAxisSize,
-          crossAxisAlignment: widget.crossAxisAlignment,
+          mainAxisSize: MainAxisSize.min,
           children: List.generate(widget.children.length, (index) {
             return AnimationConfigurationClass.staggeredList(
               position: index,
@@ -129,17 +126,5 @@ class _AnimatedScrollViewState extends State<AnimatedScrollView> {
         ),
       ),
     );
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    if (widget.onSwipeRefresh != null) {
-      return RefreshIndicator(
-        child: _widget(),
-        onRefresh: widget.onSwipeRefresh!,
-      );
-    } else {
-      return _widget();
-    }
   }
 }

@@ -11,8 +11,7 @@ class TextIcon extends StatelessWidget {
   final int? maxLine;
   final Function? onTap;
   final EdgeInsets? edgeInsets;
-  final bool expandedText;
-  final bool useMarquee;
+  final bool? expandedText;
 
   TextIcon({
     this.text,
@@ -23,20 +22,17 @@ class TextIcon extends StatelessWidget {
     this.maxLine,
     this.onTap,
     this.edgeInsets,
-    this.expandedText = false,
-    this.useMarquee = false,
+    this.expandedText,
     Key? key,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     Widget buildText() {
-      return Text(
-        text.validate(),
-        style: textStyle ?? primaryTextStyle(),
-        maxLines: maxLine,
-        overflow: TextOverflow.ellipsis,
-      );
+      return Text(text.validate(),
+          style: textStyle ?? primaryTextStyle(),
+          maxLines: maxLine,
+          overflow: TextOverflow.ellipsis);
     }
 
     return Container(
@@ -45,14 +41,7 @@ class TextIcon extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           prefix != null ? Row(children: [prefix!, spacing.width]) : SizedBox(),
-          if (expandedText && useMarquee)
-            Marquee(child: buildText()).expand()
-          else if (useMarquee)
-            Marquee(child: buildText())
-          else if (expandedText)
-            buildText().expand()
-          else
-            buildText(),
+          expandedText.validate() ? buildText().expand() : buildText(),
           suffix != null ? Row(children: [spacing.width, suffix!]) : SizedBox(),
         ],
       ),

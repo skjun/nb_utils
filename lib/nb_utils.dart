@@ -4,7 +4,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:nb_utils/nb_utils.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:nb_utils/src/extensions/int_extensions.dart';
+import 'package:nb_utils/src/models/language_data_model.dart';
+import 'package:nb_utils/src/utils/colors.dart';
+import 'package:nb_utils/src/utils/common.dart';
+import 'package:nb_utils/src/utils/constants.dart';
+import 'package:nb_utils/src/utils/decorations.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 export 'package:connectivity_plus/connectivity_plus.dart';
 export 'package:fluttertoast/fluttertoast.dart';
@@ -15,7 +22,6 @@ export 'src/deprecated_widgets.dart';
 export 'src/extensions/bool_extensions.dart';
 export 'src/extensions/color_extensions.dart';
 export 'src/extensions/context_extensions.dart';
-export 'src/extensions/date_time_extensions.dart';
 export 'src/extensions/device_extensions.dart';
 export 'src/extensions/double_extensions.dart';
 export 'src/extensions/duration_extensions.dart';
@@ -34,8 +40,8 @@ export 'src/utils/colors.dart';
 export 'src/utils/common.dart';
 export 'src/utils/confirmation_dialog.dart';
 export 'src/utils/constants.dart';
+export 'src/utils/date_time_utils.dart';
 export 'src/utils/decorations.dart';
-export 'src/utils/enums.dart';
 export 'src/utils/jwt_decoder.dart';
 export 'src/utils/line_icons.dart';
 export 'src/utils/network_utils.dart';
@@ -56,22 +62,17 @@ export 'src/widgets/blur_widget.dart';
 export 'src/widgets/circular_progress_gradient.dart';
 export 'src/widgets/dot_indicator.dart';
 export 'src/widgets/dotted_border_widget.dart';
-export 'src/widgets/double_press_back_widget.dart';
 export 'src/widgets/gradient_border.dart';
 export 'src/widgets/horizontal_list.dart';
 export 'src/widgets/hover_widget.dart';
-export 'src/widgets/hyper_link_widget.dart';
 export 'src/widgets/language_list_widget.dart';
 export 'src/widgets/loader_widget.dart';
 export 'src/widgets/marquee_widget.dart';
-export 'src/widgets/no_data_widget.dart';
 export 'src/widgets/overlay_custom_widget.dart';
-export 'src/widgets/otp_text_field.dart';
 export 'src/widgets/placeholder_widget.dart';
 export 'src/widgets/rating_bar_widget.dart';
 export 'src/widgets/read_more_text.dart';
 export 'src/widgets/responsive_widget.dart';
-export 'src/widgets/restart_app_widget.dart';
 export 'src/widgets/rich_text_widget.dart';
 export 'src/widgets/rounded_checkbox_widget.dart';
 export 'src/widgets/setting_item_widget.dart';
@@ -122,8 +123,6 @@ double defaultBlurRadius = 4.0;
 double defaultSpreadRadius = 1.0;
 double defaultAppBarElevation = 4.0;
 
-double? maxScreenWidth;
-
 double tabletBreakpointGlobal = 600.0;
 double desktopBreakpointGlobal = 720.0;
 
@@ -138,8 +137,6 @@ String defaultCurrencySymbol = currencyRupee;
 LanguageDataModel? selectedLanguageDataModel;
 List<LanguageDataModel> localeLanguageList = [];
 
-/// If forceEnableDebug if true, you will be able to see log in the logcat in release build also.
-/// By default, your log will not seen in logcat in release mode.
 bool forceEnableDebug = false;
 
 // Toast Config
@@ -152,12 +149,9 @@ PageRouteAnimation? pageRouteAnimationGlobal;
 Duration pageRouteTransitionDurationGlobal = 400.milliseconds;
 //endregion
 
-const channelName = 'nb_utils';
 final navigatorKey = GlobalKey<NavigatorState>();
 
 get getContext => navigatorKey.currentState?.overlay?.context;
-
-LiveStream liveStream = LiveStream();
 
 // Must be initialize before using shared preference
 Future<void> initialize({
@@ -180,7 +174,7 @@ Future<void> initialize({
 
 /// nb_utils class
 class NBUtils {
-  static const MethodChannel _channel = const MethodChannel(channelName);
+  static const MethodChannel _channel = const MethodChannel('nb_utils');
 
   static Future<String?> get platformVersion async {
     final String? version = await _channel.invokeMethod('getPlatformVersion');

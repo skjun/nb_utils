@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 typedef void RatingChangeCallback(double rating);
 
-/// RatingBarWidget
 // ignore: must_be_immutable
 class RatingBarWidget extends StatefulWidget {
   // Initial Rating

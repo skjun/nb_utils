@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Model class for Size Configurations
 class SizeConfig {
   static MediaQueryData? _mediaQueryData;
   static double? screenWidth;

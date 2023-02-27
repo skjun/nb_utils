@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// Color Extensions
 extension Hex on Color {
   /// return hex String
   String toHex({bool leadingHashSign = true, bool includeAlpha = false}) =>

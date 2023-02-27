@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Model class for walkthrough
 class WalkThroughModelClass {
   String? title;
   String? subTitle;

@@ -1,12 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart' as service;
+import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
 
 RegExp alphaRegExp = RegExp(r'^[a-zA-Z]+$');
 
-// String Extensions
 extension StringExtension on String? {
   /// Check email validation
   bool validateEmail() => hasMatch(this, Patterns.email);
@@ -100,8 +99,7 @@ extension StringExtension on String? {
 
   // Copy String to Clipboard
   Future<void> copyToClipboard() async {
-    await service.Clipboard.setData(
-        service.ClipboardData(text: this.validate()));
+    await Clipboard.setData(ClipboardData(text: this.validate()));
   }
 
   /// for ex. add comma in price
@@ -113,7 +111,7 @@ extension StringExtension on String? {
 
   /// Get Color from HEX String
   Color toColor({Color? defaultColor}) {
-    return getColorFromHex(this.validate(), defaultColor: defaultColor);
+    return getColorFromHex(this!, defaultColor: defaultColor);
   }
 
   /// It reverses the String
@@ -186,9 +184,13 @@ extension StringExtension on String? {
   }
 
   /// Get YouTube Video ID
-  String toYouTubeId({bool trimWhitespaces = true}) {
+  String toYouTubeId({bool trimWhitespaces = true}) =>
+      convertYouTubeUrlToId(trimWhitespaces: trimWhitespaces);
+
+  /// Get YouTube Video ID
+  String convertYouTubeUrlToId({bool trimWhitespaces = true}) {
     String url = this.validate();
-    if (!url.contains('http') && (url.length == 11)) return url;
+    if (!url.contains("http") && (url.length == 11)) return url;
     if (trimWhitespaces) url = url.trim();
 
     for (var exp in [
@@ -205,15 +207,9 @@ extension StringExtension on String? {
     return '';
   }
 
-  /// Get YouTube Video ID
-  @Deprecated('Use toYouTubeId Instead')
-  String convertYouTubeUrlToId({bool trimWhitespaces = true}) {
-    return toYouTubeId(trimWhitespaces: trimWhitespaces);
-  }
-
   /// Returns YouTube thumbnail for given video id
-  String getYouTubeThumbnail({bool trimWhitespaces = true}) {
-    return 'https://img.youtube.com/vi/${this.toYouTubeId(trimWhitespaces: trimWhitespaces)}/maxresdefault.jpg';
+  String getYouTubeThumbnail() {
+    return 'https://img.youtube.com/vi/${this.convertYouTubeUrlToId()}/maxresdefault.jpg';
   }
 
   /// Removes white space from given String
@@ -293,7 +289,7 @@ extension StringExtension on String? {
     String word = this.validate();
 
     List<String> caseSearchList = [];
-    String temp = '';
+    String temp = "";
 
     for (int i = 0; i < word.length; i++) {
       temp = temp + word[i];

@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-// Context Extensions
 extension ContextExtensions on BuildContext {
   /// return screen size
   Size size() => MediaQuery.of(this).size;
 
   /// return screen width
-  double width() => maxScreenWidth ?? MediaQuery.of(this).size.width;
+  double width() => MediaQuery.of(this).size.width;
 
   /// return screen height
   double height() => MediaQuery.of(this).size.height;
@@ -65,11 +64,6 @@ extension ContextExtensions on BuildContext {
     FocusScope.of(this).requestFocus(focus);
   }
 
-  /// Request focus to given FocusNode
-  void unFocus(FocusNode focus) {
-    focus.unfocus();
-  }
-
   bool isPhone() => MediaQuery.of(this).size.width < tabletBreakpointGlobal;
 
   bool isTablet() =>
@@ -77,32 +71,4 @@ extension ContextExtensions on BuildContext {
       MediaQuery.of(this).size.width >= tabletBreakpointGlobal;
 
   bool isDesktop() => MediaQuery.of(this).size.width >= desktopBreakpointGlobal;
-
-  Orientation get orientation => MediaQuery.of(this).orientation;
-
-  bool get isLandscape => orientation == Orientation.landscape;
-
-  bool get isPortrait => orientation == Orientation.portrait;
-
-  bool get canPop => Navigator.canPop(this);
-
-  void pop<T extends Object>([T? result]) => Navigator.pop(this, result);
-
-  TargetPlatform get platform => Theme.of(this).platform;
-
-  bool get isAndroid => this.platform == TargetPlatform.android;
-
-  bool get isIOS => this.platform == TargetPlatform.iOS;
-
-  bool get isMacOS => this.platform == TargetPlatform.macOS;
-
-  bool get isWindows => this.platform == TargetPlatform.windows;
-
-  bool get isFuchsia => this.platform == TargetPlatform.fuchsia;
-
-  bool get isLinux => this.platform == TargetPlatform.linux;
-
-  void openDrawer() => Scaffold.of(this).openDrawer();
-
-  void openEndDrawer() => Scaffold.of(this).openEndDrawer();
 }

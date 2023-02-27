@@ -2,7 +2,6 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-// Widget Extensions
 extension WidgetExtension on Widget? {
   /// With custom height and width
   SizedBox withSize({double width = 0.0, double height = 0.0}) {
@@ -350,10 +349,5 @@ extension WidgetExtension on Widget? {
   /// Validate given widget is not null and returns given value if null.
   Widget withTooltip({required String msg}) {
     return Tooltip(message: msg, child: this);
-  }
-
-  /// Make your any widget refreshable with RefreshIndicator on top
-  Widget get makeRefreshable {
-    return Stack(children: [ListView(), this!]);
   }
 }

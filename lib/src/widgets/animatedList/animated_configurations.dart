@@ -3,7 +3,7 @@ import 'dart:math';
 
 import 'package:flutter/widgets.dart';
 
-enum ListAnimationType { None, FadeIn, Scale, Slide, Flip }
+enum ListAnimationType { FadeIn, Scale, Slide, Flip }
 
 const defaultAnimationDuration = Duration(milliseconds: 500);
 const defaultAnimationDelay = Duration(milliseconds: 50);
@@ -225,12 +225,12 @@ class _AnimationLimiterProviderClass extends InheritedWidget {
 /// Depending on the scenario in which you will present your animations,
 /// you should use one of [AnimationConfigurationClass]'s named constructors.
 ///
-/// [AnimationConfigurationClass.synchronized] if you want to launch all the children's animations at the same time.
+/// [AnimationConfiguration.synchronized] if you want to launch all the children's animations at the same time.
 ///
-/// [AnimationConfigurationClass.staggeredList] if you want to delay the animation of each child
+/// [AnimationConfiguration.staggeredList] if you want to delay the animation of each child
 /// to produce a single-axis staggered animations (from top to bottom or from left to right).
 ///
-/// [AnimationConfigurationClass.staggeredGrid] if you want to delay the animation of each child
+/// [AnimationConfiguration.staggeredGrid] if you want to delay the animation of each child
 /// to produce a dual-axis staggered animations (from left to right and top to bottom).
 class AnimationConfigurationClass extends InheritedWidget {
   /// Index used as a factor to calculate the delay of each child's animation.
@@ -325,7 +325,7 @@ class AnimationConfigurationClass extends InheritedWidget {
   /// Helper method to apply a staggered animation to the children of a [Column] or [Row].
   ///
   /// It maps every child with an index and calls
-  /// [AnimationConfigurationClass.staggeredList] constructor under the hood.
+  /// [AnimationConfiguration.staggeredList] constructor under the hood.
   ///
   /// Default value for [duration] is 225ms.
   ///
