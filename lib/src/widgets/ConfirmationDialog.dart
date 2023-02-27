@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
 
 enum DialogType { CONFIRMATION, ACCEPT, DELETE, UPDATE, ADD, RETRY }
 
@@ -200,10 +201,10 @@ Widget defaultPlaceHolder(
   return Container(
     height: height,
     width: width,
-    decoration: BoxDecoration(
-      color: getDialogPrimaryColor(context, dialogType, primaryColor)
-          .withOpacity(0.2),
-    ),
+    decoration: ShapeDecoration(
+        shape: shape ?? dialogShape(),
+        color: getDialogPrimaryColor(context, dialogType, primaryColor)
+            .withOpacity(0.2)),
     alignment: Alignment.center,
     child: child ?? getCenteredImage(context, dialogType, primaryColor),
   );
@@ -256,7 +257,8 @@ Widget buildTitleWidget(
             ),
           );
         },
-      );
+      ).cornerRadiusWithClipRRectOnly(
+          topLeft: defaultRadius.toInt(), topRight: defaultRadius.toInt());
     } else {
       return defaultPlaceHolder(
           context, dialogType, height, width, primaryColor,
@@ -276,54 +278,46 @@ Future<bool?> showConfirmDialogCustom(
   String? centerImage,
   Widget? customCenterWidget,
   Color? primaryColor,
-  Color? positiveTextColor,
-  Color? negativeTextColor,
   ShapeBorder? shape,
   Function(BuildContext)? onCancel,
   bool barrierDismissible = true,
-  double? height,
-  double? width,
+  double height = 140,
+  double width = 220,
   bool cancelable = true,
   Color? barrierColor,
   DialogType dialogType = DialogType.CONFIRMATION,
   DialogAnimation dialogAnimation = DialogAnimation.DEFAULT,
   Duration? transitionDuration,
-  Curve curve = Curves.easeInBack,
 }) async {
-  hideKeyboard(context);
-
-  return await showGeneralDialog(
+  return showGeneralDialog(
     context: context,
-    barrierColor: barrierColor ?? Colors.black54,
+    barrierColor: barrierColor ?? Color(0x80000000),
     pageBuilder: (context, animation, secondaryAnimation) {
       return Container();
     },
     barrierDismissible: barrierDismissible,
     barrierLabel: '',
-    transitionDuration: transitionDuration ?? 400.milliseconds,
+    transitionDuration: transitionDuration ?? 500.milliseconds,
     transitionBuilder: (_, animation, secondaryAnimation, child) {
       return dialogAnimatedWrapperWidget(
         animation: animation,
         dialogAnimation: dialogAnimation,
-        curve: curve,
         child: AlertDialog(
           shape: shape ?? dialogShape(),
           titlePadding: EdgeInsets.zero,
           backgroundColor: _.cardColor,
-          elevation: defaultElevation.toDouble(),
           title: buildTitleWidget(
             _,
             dialogType,
             primaryColor,
             customCenterWidget,
-            height ?? customDialogHeight,
-            width ?? customDialogWidth,
+            height,
+            width,
             centerImage,
             shape,
-          ).cornerRadiusWithClipRRectOnly(
-              topLeft: defaultRadius.toInt(), topRight: defaultRadius.toInt()),
+          ),
           content: Container(
-            width: width ?? customDialogWidth,
+            width: width,
             color: _.cardColor,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -361,9 +355,7 @@ Future<bool?> showConfirmDialogCustom(
                           6.width,
                           Text(
                             negativeText ?? 'Cancel',
-                            style: boldTextStyle(
-                                color: negativeTextColor ??
-                                    textPrimaryColorGlobal),
+                            style: boldTextStyle(color: textPrimaryColorGlobal),
                           ),
                         ],
                       ).fit(),
@@ -384,8 +376,7 @@ Future<bool?> showConfirmDialogCustom(
                           6.width,
                           Text(
                             positiveText ?? getPositiveText(dialogType),
-                            style: boldTextStyle(
-                                color: positiveTextColor ?? Colors.white),
+                            style: boldTextStyle(color: Colors.white),
                           ),
                         ],
                       ).fit(),

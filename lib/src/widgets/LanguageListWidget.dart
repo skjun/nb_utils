@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
 
 enum WidgetType { DROPDOWN, LIST }
 
@@ -17,8 +18,7 @@ class LanguageListWidget extends StatefulWidget {
     this.onLanguageChange,
     this.scrollPhysics,
     this.trailing,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   LanguageListWidgetState createState() => LanguageListWidgetState();
@@ -103,7 +103,6 @@ class LanguageListWidgetState extends State<LanguageListWidget> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 if (data.flag != null) _buildImageWidget(data.flag!),
-                4.width,
                 Text(data.name.validate(), style: primaryTextStyle()),
               ],
             ),

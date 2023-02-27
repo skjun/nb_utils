@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// HorizontalList widget is great when you don't want to give fix height to a item
 class HorizontalList extends StatelessWidget {
   final int itemCount;
   final IndexedWidgetBuilder itemBuilder;
@@ -25,8 +24,7 @@ class HorizontalList extends StatelessWidget {
     this.reverse = false,
     this.wrapAlignment,
     this.crossAxisAlignment,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

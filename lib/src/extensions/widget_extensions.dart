@@ -80,7 +80,6 @@ extension WidgetExtension on Widget? {
         topRight: Radius.circular(topRight.toDouble()),
       ),
       child: this,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
     );
   }
 
@@ -89,7 +88,6 @@ extension WidgetExtension on Widget? {
     return ClipRRect(
       borderRadius: BorderRadius.all(Radius.circular(radius)),
       child: this,
-      clipBehavior: Clip.antiAliasWithSaveLayer,
     );
   }
 
@@ -112,16 +110,13 @@ extension WidgetExtension on Widget? {
       maintainSize: maintainSize,
       maintainState: maintainState,
       child: this!,
-      replacement: replacement ?? SizedBox(),
+      replacement: replacement ?? Container(),
     );
   }
 
   /// add opacity to parent widget
-  Widget opacity({
-    required double opacity,
-    int durationInSecond = 1,
-    Duration? duration,
-  }) {
+  Widget opacity(
+      {required double opacity, int durationInSecond = 1, Duration? duration}) {
     return AnimatedOpacity(
       opacity: opacity,
       duration: duration ?? Duration(milliseconds: 500),
@@ -264,16 +259,53 @@ extension WidgetExtension on Widget? {
       Duration? duration}) async {
     if (isNewTask) {
       return await Navigator.of(context).pushAndRemoveUntil(
-        buildPageRoute(
-            this!, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
+        buildPageRoute(this!, pageRouteAnimation, duration),
         (route) => false,
       );
     } else {
       return await Navigator.of(context).push(
-        buildPageRoute(
-            this!, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
+        buildPageRoute(this!, pageRouteAnimation, duration),
       );
     }
+  }
+
+  Route<T> buildPageRoute<T>(Widget child,
+      PageRouteAnimation? pageRouteAnimation, Duration? duration) {
+    if (pageRouteAnimation != null) {
+      if (pageRouteAnimation == PageRouteAnimation.Fade) {
+        return PageRouteBuilder(
+          pageBuilder: (c, a1, a2) => this!,
+          transitionsBuilder: (c, anim, a2, child) =>
+              FadeTransition(opacity: anim, child: child),
+          transitionDuration: duration ?? 1000.milliseconds,
+        );
+      } else if (pageRouteAnimation == PageRouteAnimation.Rotate) {
+        return PageRouteBuilder(
+          pageBuilder: (c, a1, a2) => this!,
+          transitionsBuilder: (c, anim, a2, child) =>
+              RotationTransition(child: child, turns: ReverseAnimation(anim)),
+          transitionDuration: duration ?? 700.milliseconds,
+        );
+      } else if (pageRouteAnimation == PageRouteAnimation.Scale) {
+        return PageRouteBuilder(
+          pageBuilder: (c, a1, a2) => this!,
+          transitionsBuilder: (c, anim, a2, child) =>
+              ScaleTransition(child: child, scale: anim),
+          transitionDuration: duration ?? 700.milliseconds,
+        );
+      } else if (pageRouteAnimation == PageRouteAnimation.Slide) {
+        return PageRouteBuilder(
+          pageBuilder: (c, a1, a2) => this!,
+          transitionsBuilder: (c, anim, a2, child) => SlideTransition(
+            child: child,
+            position: Tween(begin: Offset(1.0, 0.0), end: Offset(0.0, 0.0))
+                .animate(anim),
+          ),
+          transitionDuration: duration ?? 500.milliseconds,
+        );
+      }
+    }
+    return MaterialPageRoute<T>(builder: (_) => this!);
   }
 
   /// Wrap with ShaderMask widget

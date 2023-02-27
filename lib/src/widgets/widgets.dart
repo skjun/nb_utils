@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/common.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
+import 'package:nb_utils/src/widgets/ConfirmationDialog.dart';
+import 'package:nb_utils/src/widgets/Loader.dart';
 
 /// show confirm dialog box
 Future<bool?> showConfirmDialog<bool>(
@@ -59,26 +63,19 @@ Future<T?> showInDialog<T>(
   //EdgeInsets insetPadding = const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16.0),
   List<Widget>? actions,
   bool barrierDismissible = true,
-  bool hideSoftKeyboard = true,
-  Duration? transitionDuration,
-  Curve curve = Curves.easeInBack,
 }) async {
-  if (hideSoftKeyboard) hideKeyboard(context);
-
   return await showGeneralDialog<T>(
     context: context,
-    barrierColor: barrierColor ?? Colors.black54,
+    barrierColor: barrierColor ?? Color(0x80000000),
     pageBuilder: (context, animation, secondaryAnimation) {
       return Container();
     },
     barrierLabel: '',
     barrierDismissible: barrierDismissible,
-    transitionDuration: transitionDuration ?? 400.milliseconds,
-    transitionBuilder: (_, animation, secondaryAnimation, c) {
+    transitionBuilder: (_, animation, secondaryAnimation, child) {
       return dialogAnimatedWrapperWidget(
         animation: animation,
         dialogAnimation: dialogAnimation,
-        curve: curve,
         child: AlertDialog(
           content: builder != null ? builder.call(_) : child,
           shape: shape ?? defaultDialogShape,
@@ -88,7 +85,7 @@ Future<T?> showInDialog<T>(
               contentPadding ?? EdgeInsets.fromLTRB(24.0, 20.0, 24.0, 24.0),
           //scrollable: scrollable,
           backgroundColor: backgroundColor,
-          elevation: elevation ?? defaultElevation.toDouble(),
+          elevation: elevation ?? 0,
           //insetPadding: insetPadding,
           actions: actions,
         ),
@@ -111,7 +108,7 @@ AppBar appBarWidget(
   Color? shadowColor,
   double? elevation,
   Widget? backWidget,
-  @Deprecated('Use systemOverlayStyle instead') Brightness? brightness,
+  Brightness? brightness,
   SystemUiOverlayStyle? systemUiOverlayStyle,
   TextStyle? titleTextStyle,
   PreferredSizeWidget? bottom,
@@ -134,6 +131,7 @@ AppBar appBarWidget(
         : null,
     shadowColor: shadowColor,
     elevation: elevation ?? defaultAppBarElevation,
+    brightness: brightness,
     systemOverlayStyle: systemUiOverlayStyle,
     bottom: bottom,
     flexibleSpace: flexibleSpace,

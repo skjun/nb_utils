@@ -3,9 +3,6 @@ var errorSomethingWentWrong = 'Something Went Wrong';
 var errorThisFieldRequired = 'This field is required';
 var errorInternetNotAvailable = 'Your internet is not working';
 
-var customDialogHeight = 140.0;
-var customDialogWidth = 220.0;
-
 const currencyRupee = '₹';
 const currencyDollar = '\$';
 const currencyEuro = '€';
@@ -19,9 +16,6 @@ const twitterBaseURL = 'https://twitter.com/';
 const youtubeBaseURL = 'https://www.youtube.com/';
 const redditBaseURL = 'https://reddit.com/r/';
 const telegramBaseURL = 'https://t.me/';
-const facebookMessengerURL = 'https://m.me/';
-const whatsappURL = 'https://wa.me/';
-const googleDriveURL = 'https://docs.google.com/viewer?url=';
 
 const SELECTED_LANGUAGE_CODE = 'selected_language_code';
 const THEME_MODE_INDEX = 'theme_mode_index';

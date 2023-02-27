@@ -4,7 +4,6 @@ class WalkThroughModelClass {
   String? title;
   String? subTitle;
   Color? color;
-  Map<String, dynamic>? data;
 
   /// Can be image url or asset path
   String? image;
@@ -14,6 +13,5 @@ class WalkThroughModelClass {
     this.subTitle,
     this.image,
     this.color,
-    this.data,
   });
 }

@@ -26,26 +26,11 @@ extension ContextExtensions on BuildContext {
   /// Returns Theme.of(context)
   ThemeData get theme => Theme.of(this);
 
-  /// Returns Theme.of(context).textTheme
-  TextTheme get textTheme => Theme.of(this).textTheme;
-
-  /// Returns DefaultTextStyle.of(context)
-  DefaultTextStyle get defaultTextStyle => DefaultTextStyle.of(this);
-
-  /// Returns Form.of(context)
-  FormState? get formState => Form.of(this);
-
-  /// Returns Scaffold.of(context)
-  ScaffoldState get scaffoldState => Scaffold.of(this);
-
-  /// Returns Overlay.of(context)
-  OverlayState? get overlayState => Overlay.of(this);
-
   /// Returns primaryColor Color
   Color get primaryColor => theme.primaryColor;
 
   /// Returns accentColor Color
-  Color get accentColor => theme.colorScheme.secondary;
+  Color get accentColor => theme.accentColor;
 
   /// Returns scaffoldBackgroundColor Color
   Color get scaffoldBackgroundColor => theme.scaffoldBackgroundColor;

@@ -4,9 +4,6 @@ import 'package:nb_utils/nb_utils.dart';
 /// Circular Loader Widget
 class Loader extends StatefulWidget {
   final Color? color;
-
-  @Deprecated(
-      'accentColor is now deprecated and not being used. use defaultLoaderAccentColorGlobal instead')
   final Color? accentColor;
   final Decoration? decoration;
   final int? size;
@@ -20,8 +17,7 @@ class Loader extends StatefulWidget {
     this.value,
     this.valueColor,
     this.accentColor,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   LoaderState createState() => LoaderState();
@@ -56,14 +52,16 @@ class LoaderState extends State<Loader> {
             boxShadow: defaultBoxShadow(),
           ),
       //Progress color uses accentColor from ThemeData
-      child: CircularProgressIndicator(
-        strokeWidth: 2,
-        value: widget.value,
-        valueColor: widget.valueColor ??
-            AlwaysStoppedAnimation(
-              defaultLoaderAccentColorGlobal ??
-                  Theme.of(context).colorScheme.secondary,
-            ),
+      child: Theme(
+        data: ThemeData(
+            accentColor: widget.accentColor ??
+                (defaultLoaderAccentColorGlobal ??
+                    Theme.of(context).accentColor)),
+        child: CircularProgressIndicator(
+          strokeWidth: 2,
+          value: widget.value,
+          valueColor: widget.valueColor,
+        ),
       ),
     ).center();
   }

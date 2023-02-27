@@ -1,19 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
 
-enum TextFieldType {
-  EMAIL,
-  PASSWORD,
-  NAME,
-  @Deprecated('Use MULTILINE instead. ADDRESS will be removed in major update')
-  ADDRESS,
-  MULTILINE,
-  OTHER,
-  PHONE,
-  URL,
-  USERNAME
-}
+enum TextFieldType { EMAIL, PASSWORD, NAME, ADDRESS, OTHER, PHONE, URL }
 
 /// Default Text Form Field
 class AppTextField extends StatefulWidget {
@@ -50,23 +40,11 @@ class AppTextField extends StatefulWidget {
   final Function()? onTap;
   final InputCounterWidgetBuilder? buildCounter;
   final List<TextInputFormatter>? inputFormatters;
-  final TextAlignVertical? textAlignVertical;
-  final bool? expands;
-  final bool? showCursor;
-  final TextSelectionControls? selectionControls;
-  final StrutStyle? strutStyle;
-  final String? obscuringCharacter;
-  final String? initialValue;
-  final Brightness? keyboardAppearance;
-  final ToolbarOptions? toolbarOptions;
-  final Widget? suffixPasswordVisibleWidget;
-  final Widget? suffixPasswordInvisibleWidget;
 
   final String? errorThisFieldRequired;
   final String? errorInvalidEmail;
   final String? errorMinimumPasswordLength;
   final String? errorInvalidURL;
-  final String? errorInvalidUsername;
 
   AppTextField({
     this.controller,
@@ -105,20 +83,7 @@ class AppTextField extends StatefulWidget {
     this.errorInvalidEmail,
     this.errorMinimumPasswordLength,
     this.errorInvalidURL,
-    this.errorInvalidUsername,
-    this.textAlignVertical,
-    this.expands,
-    this.showCursor,
-    this.selectionControls,
-    this.strutStyle,
-    this.obscuringCharacter,
-    this.initialValue,
-    this.keyboardAppearance,
-    this.toolbarOptions,
-    this.suffixPasswordVisibleWidget,
-    this.suffixPasswordInvisibleWidget,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   _AppTextFieldState createState() => _AppTextFieldState();
@@ -169,17 +134,6 @@ class _AppTextFieldState extends State<AppTextField> {
           }
           return null;
         };
-      } else if (widget.textFieldType == TextFieldType.USERNAME) {
-        return (s) {
-          if (s!.trim().isEmpty)
-            return widget.errorThisFieldRequired
-                .validate(value: errorThisFieldRequired);
-          if (s.contains(' ')) {
-            return widget.errorInvalidUsername
-                .validate(value: 'Username should not contain space');
-          }
-          return null;
-        };
       } else {
         return null;
       }
@@ -193,8 +147,7 @@ class _AppTextFieldState extends State<AppTextField> {
       return widget.textCapitalization!;
     } else if (widget.textFieldType == TextFieldType.NAME) {
       return TextCapitalization.words;
-    } else if (widget.textFieldType == TextFieldType.ADDRESS ||
-        widget.textFieldType == TextFieldType.MULTILINE) {
+    } else if (widget.textFieldType == TextFieldType.ADDRESS) {
       return TextCapitalization.sentences;
     } else {
       return TextCapitalization.none;
@@ -204,8 +157,7 @@ class _AppTextFieldState extends State<AppTextField> {
   TextInputAction? applyTextInputAction() {
     if (widget.textInputAction != null) {
       return widget.textInputAction;
-    } else if (widget.textFieldType == TextFieldType.ADDRESS ||
-        widget.textFieldType == TextFieldType.MULTILINE) {
+    } else if (widget.textFieldType == TextFieldType.ADDRESS) {
       return TextInputAction.newline;
     } else if (widget.nextFocus != null) {
       return TextInputAction.next;
@@ -219,8 +171,7 @@ class _AppTextFieldState extends State<AppTextField> {
       return widget.keyboardType;
     } else if (widget.textFieldType == TextFieldType.EMAIL) {
       return TextInputType.emailAddress;
-    } else if (widget.textFieldType == TextFieldType.ADDRESS ||
-        widget.textFieldType == TextFieldType.MULTILINE) {
+    } else if (widget.textFieldType == TextFieldType.ADDRESS) {
       return TextInputType.multiline;
     } else if (widget.textFieldType == TextFieldType.PASSWORD) {
       return TextInputType.visiblePassword;
@@ -230,51 +181,6 @@ class _AppTextFieldState extends State<AppTextField> {
       return TextInputType.url;
     } else {
       return TextInputType.text;
-    }
-  }
-
-  void onPasswordVisibilityChange(bool val) {
-    isPasswordVisible = val;
-    setState(() {});
-  }
-
-  Widget? suffixIcon() {
-    if (widget.textFieldType == TextFieldType.PASSWORD) {
-      if (widget.suffix != null) {
-        return widget.suffix;
-      } else {
-        if (isPasswordVisible) {
-          if (widget.suffixPasswordVisibleWidget != null) {
-            return widget.suffixPasswordVisibleWidget!.onTap(() {
-              onPasswordVisibilityChange(false);
-            });
-          } else {
-            return Icon(
-              Icons.visibility,
-              color:
-                  widget.suffixIconColor ?? Theme.of(context).iconTheme.color,
-            ).onTap(() {
-              onPasswordVisibilityChange(false);
-            });
-          }
-        } else {
-          if (widget.suffixPasswordInvisibleWidget != null) {
-            return widget.suffixPasswordInvisibleWidget!.onTap(() {
-              onPasswordVisibilityChange(true);
-            });
-          } else {
-            return Icon(
-              Icons.visibility_off,
-              color:
-                  widget.suffixIconColor ?? Theme.of(context).iconTheme.color,
-            ).onTap(() {
-              onPasswordVisibilityChange(true);
-            });
-          }
-        }
-      }
-    } else {
-      return widget.suffix;
     }
   }
 
@@ -296,18 +202,30 @@ class _AppTextFieldState extends State<AppTextField> {
       keyboardType: applyTextInputType(),
       decoration: widget.decoration != null
           ? (widget.decoration!.copyWith(
-              suffixIcon: suffixIcon(),
+              suffixIcon: widget.textFieldType == TextFieldType.PASSWORD
+                  ? widget.suffix != null
+                      ? widget.suffix
+                      : Icon(
+                          isPasswordVisible
+                              ? Icons.visibility
+                              : Icons.visibility_off,
+                          color: widget.suffixIconColor ??
+                              Theme.of(context).iconTheme.color,
+                        ).onTap(() {
+                          isPasswordVisible = !isPasswordVisible;
+
+                          setState(() {});
+                        })
+                  : widget.suffix,
             ))
           : InputDecoration(),
       focusNode: widget.focus,
       style: widget.textStyle ?? primaryTextStyle(),
       textAlign: widget.textAlign ?? TextAlign.start,
-      maxLines: (widget.textFieldType == TextFieldType.ADDRESS ||
-              widget.textFieldType == TextFieldType.MULTILINE)
+      maxLines: widget.textFieldType == TextFieldType.ADDRESS
           ? null
           : widget.maxLines.validate(value: 1),
-      minLines: widget.minLines.validate(
-          value: widget.textFieldType == TextFieldType.MULTILINE ? 3 : 1),
+      minLines: widget.minLines.validate(value: 1),
       autofocus: widget.autoFocus ?? false,
       enabled: widget.enabled,
       onChanged: widget.onChanged,
@@ -326,15 +244,6 @@ class _AppTextFieldState extends State<AppTextField> {
       scrollPhysics: BouncingScrollPhysics(),
       enableInteractiveSelection: true,
       inputFormatters: widget.inputFormatters,
-      textAlignVertical: widget.textAlignVertical,
-      expands: widget.expands.validate(),
-      showCursor: widget.showCursor,
-      selectionControls: widget.selectionControls,
-      strutStyle: widget.strutStyle,
-      obscuringCharacter: widget.obscuringCharacter.validate(value: '•'),
-      initialValue: widget.initialValue,
-      keyboardAppearance: widget.keyboardAppearance,
-      toolbarOptions: widget.toolbarOptions,
     );
   }
 }

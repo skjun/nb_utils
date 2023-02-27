@@ -32,10 +32,7 @@ bool get isGoogle => !isWeb && (Platform.isAndroid || Platform.isFuchsia);
 
 bool get isAndroid => !isWeb && Platform.isAndroid;
 
-@Deprecated('Use isIOS instead')
 bool get isIos => !isWeb && Platform.isIOS;
-
-bool get isIOS => !isWeb && Platform.isIOS;
 
 bool get isMacOS => !isWeb && Platform.isMacOS;
 

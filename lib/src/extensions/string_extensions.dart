@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/pattern.dart';
 
 RegExp alphaRegExp = RegExp(r'^[a-zA-Z]+$');
 
@@ -103,10 +104,9 @@ extension StringExtension on String? {
   }
 
   /// for ex. add comma in price
-  String formatNumberWithComma({String seperator = ','}) {
+  String formatNumberWithComma() {
     return this.validate().replaceAllMapped(
-        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'),
-        (Match m) => '${m[1]}$seperator');
+        RegExp(r'(\d{1,3})(?=(\d{3})+(?!\d))'), (Match m) => '${m[1]},');
   }
 
   /// Get Color from HEX String
@@ -222,14 +222,14 @@ extension StringExtension on String? {
   }
 
   /// Returns only numbers from a string trim Whitespaces
-  String getNumericOnly({bool aFirstWordOnly = false}) {
+  String getNumericOnly(String string, {bool aFirstWordOnly = false}) {
     String numericOnlyString = '';
 
-    for (var i = 0; i < this.validate().length; i++) {
-      if ((this![i].isDigit())) {
-        numericOnlyString += this![i];
+    for (var i = 0; i < string.length; i++) {
+      if ((string[i].isDigit())) {
+        numericOnlyString += string[i];
       }
-      if (aFirstWordOnly && numericOnlyString.isNotEmpty && this![i] == " ") {
+      if (aFirstWordOnly && numericOnlyString.isNotEmpty && string[i] == " ") {
         break;
       }
     }
@@ -279,9 +279,22 @@ extension StringExtension on String? {
   }
 
   /// Generate slug of a given String
-  String toSlug({String delimiter = '_'}) {
-    String text = this.validate().trim().toLowerCase();
-    return text.replaceAll(' ', delimiter);
+  String toSlug() {
+    var words = this.validate().trim().split(RegExp(r'(\s+)'));
+    var slugWord = '';
+
+    if (this.validate().length == 1) {
+      return this!;
+    }
+
+    for (var i = 0; i < this.validate().length; i++) {
+      if (i != this.validate().length - 1) {
+        slugWord += words[i] + '_';
+      } else {
+        slugWord += words[i];
+      }
+    }
+    return slugWord;
   }
 
   /// returns searchable array for Firebase Database

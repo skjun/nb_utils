@@ -103,7 +103,6 @@ TextStyle secondaryTextStyle({
 }
 
 // Create Rich Text
-@Deprecated('Use RichTextWidget instead')
 RichText createRichText({
   required List<TextSpan> list,
   TextOverflow overflow = TextOverflow.clip,

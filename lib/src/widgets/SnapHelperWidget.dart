@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-// SnapHelperWidget makes easy implementation for future or stream builder
 class SnapHelperWidget<T> extends StatelessWidget {
   final dynamic initialData;
   final Future<T>? future;
@@ -19,8 +18,7 @@ class SnapHelperWidget<T> extends StatelessWidget {
     this.initialData,
     this.defaultErrorMessage,
     this.useConnectionStateForLoader = false,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -30,16 +28,7 @@ class SnapHelperWidget<T> extends StatelessWidget {
       builder: (BuildContext context, AsyncSnapshot<T> snap) {
         if (!useConnectionStateForLoader) {
           if (snap.hasData) {
-            if (snap.data != null) {
-              return onSuccess(snap.data!);
-            } else {
-              return snapWidgetHelper(
-                snap,
-                errorWidget: errorWidget,
-                loadingWidget: loadingWidget,
-                defaultErrorMessage: defaultErrorMessage,
-              );
-            }
+            return onSuccess(snap.data!);
           } else {
             return snapWidgetHelper(
               snap,
@@ -55,16 +44,7 @@ class SnapHelperWidget<T> extends StatelessWidget {
               return loadingWidget ?? Loader();
             case ConnectionState.done:
               if (snap.hasData) {
-                if (snap.data != null) {
-                  return onSuccess(snap.data!);
-                } else {
-                  return snapWidgetHelper(
-                    snap,
-                    errorWidget: errorWidget,
-                    loadingWidget: loadingWidget,
-                    defaultErrorMessage: defaultErrorMessage,
-                  );
-                }
+                return onSuccess(snap.data!);
               } else {
                 return errorWidget ??
                     Text(defaultErrorMessage ?? snap.error.toString(),

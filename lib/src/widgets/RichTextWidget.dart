@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-// RichTextWidget
 class RichTextWidget extends StatelessWidget {
   final List<TextSpan> list;
   final TextOverflow? overflow;
@@ -18,8 +17,7 @@ class RichTextWidget extends StatelessWidget {
     this.textDirection,
     this.strutStyle,
     this.locale,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

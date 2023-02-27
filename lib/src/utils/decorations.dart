@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
+
+import '../../nb_utils.dart';
 
 /// returns default InputDecoration for AppTextField widget
 InputDecoration defaultInputDecoration(
@@ -130,7 +132,6 @@ Decoration boxDecorationRoundedWithShadow(
   double? blurRadius,
   double? spreadRadius,
   Offset offset = const Offset(0.0, 0.0),
-  LinearGradient? gradient,
 }) {
   return BoxDecoration(
     boxShadow: defaultBoxShadow(
@@ -140,7 +141,6 @@ Decoration boxDecorationRoundedWithShadow(
       offset: offset,
     ),
     color: backgroundColor,
-    gradient: gradient,
     borderRadius: radius(radiusAll.toDouble()),
   );
 }

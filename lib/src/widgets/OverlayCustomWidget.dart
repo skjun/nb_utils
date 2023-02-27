@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:nb_utils/nb_utils.dart';
 
-/// Show custom widget on a widget click
 class OverlayCustomWidget extends StatelessWidget {
   final bool showOverlay;
   final Widget Function(BuildContext, Offset anchor) overlayBuilder;
@@ -17,20 +15,19 @@ class OverlayCustomWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       child: LayoutBuilder(
-        builder: (BuildContext context, BoxConstraints constraints) {
-          return OverlayBuilder(
-            showOverlay: showOverlay,
-            overlayBuilder: (BuildContext overlayContext) {
-              RenderBox box = context.findRenderObject() as RenderBox;
-              final center =
-                  box.size.center(box.localToGlobal(const Offset(0.0, 0.0)));
+          builder: (BuildContext context, BoxConstraints constraints) {
+        return OverlayBuilder(
+          showOverlay: showOverlay,
+          overlayBuilder: (BuildContext overlayContext) {
+            RenderBox box = context.findRenderObject() as RenderBox;
+            final center =
+                box.size.center(box.localToGlobal(const Offset(0.0, 0.0)));
 
-              return overlayBuilder(overlayContext, center);
-            },
-            child: child,
-          );
-        },
-      ),
+            return overlayBuilder(overlayContext, center);
+          },
+          child: child,
+        );
+      }),
     );
   }
 }
@@ -58,22 +55,21 @@ class _OverlayBuilderState extends State<OverlayBuilder> {
     super.initState();
 
     if (widget.showOverlay) {
-      makeNullable(WidgetsBinding.instance)!
-          .addPostFrameCallback((_) => showOverlay());
+      WidgetsBinding.instance!.addPostFrameCallback((_) => showOverlay());
     }
   }
 
   @override
   void didUpdateWidget(OverlayBuilder oldWidget) {
     super.didUpdateWidget(oldWidget);
-    makeNullable(WidgetsBinding.instance)!
+    WidgetsBinding.instance!
         .addPostFrameCallback((_) => syncWidgetAndOverlay());
   }
 
   @override
   void reassemble() {
     super.reassemble();
-    makeNullable(WidgetsBinding.instance)!
+    WidgetsBinding.instance!
         .addPostFrameCallback((_) => syncWidgetAndOverlay());
   }
 

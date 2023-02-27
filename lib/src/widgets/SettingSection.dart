@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-// SettingSection
 class SettingSection extends StatelessWidget {
   final Widget? title;
   final Widget? subTitle;
@@ -21,8 +20,7 @@ class SettingSection extends StatelessWidget {
     this.divider,
     this.title,
     this.subTitle,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

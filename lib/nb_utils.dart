@@ -5,18 +5,17 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:nb_utils/src/extensions/int_extensions.dart';
-import 'package:nb_utils/src/models/language_data_model.dart';
+import 'package:nb_utils/src/models/LanguageDataModel.dart';
 import 'package:nb_utils/src/utils/colors.dart';
-import 'package:nb_utils/src/utils/common.dart';
 import 'package:nb_utils/src/utils/constants.dart';
 import 'package:nb_utils/src/utils/decorations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-export 'package:connectivity_plus/connectivity_plus.dart';
+export 'package:connectivity/connectivity.dart';
 export 'package:fluttertoast/fluttertoast.dart';
 export 'package:shared_preferences/shared_preferences.dart';
 
+export 'src/LiveStream.dart';
 export 'src/customPaints/google_logo_painter.dart';
 export 'src/deprecated_widgets.dart';
 export 'src/extensions/bool_extensions.dart';
@@ -30,61 +29,48 @@ export 'src/extensions/list_extensions.dart';
 export 'src/extensions/num_extensions.dart';
 export 'src/extensions/scroll_extensions.dart';
 export 'src/extensions/string_extensions.dart';
+export 'src/extensions/string_extensions.dart';
 export 'src/extensions/widget_extensions.dart';
-export 'src/live_stream.dart';
-export 'src/models/language_data_model.dart';
-export 'src/models/package_info_model.dart';
-export 'src/models/walkthrough_model.dart';
+export 'src/models/LanguageDataModel.dart';
+export 'src/models/WalkThroughModel.dart';
 export 'src/utils/after_layout.dart';
 export 'src/utils/colors.dart';
 export 'src/utils/common.dart';
-export 'src/utils/confirmation_dialog.dart';
 export 'src/utils/constants.dart';
 export 'src/utils/date_time_utils.dart';
 export 'src/utils/decorations.dart';
 export 'src/utils/jwt_decoder.dart';
-export 'src/utils/line_icons.dart';
 export 'src/utils/network_utils.dart';
 export 'src/utils/pattern.dart';
 export 'src/utils/shared_pref.dart';
-export 'src/utils/size_config.dart';
 export 'src/utils/system_utils.dart';
 export 'src/utils/text_styles.dart';
 export 'src/utils/time_formatter.dart';
+export 'src/widgets/AppButton.dart';
+export 'src/widgets/AppTextField.dart';
+export 'src/widgets/CircularProgressGradient.dart';
+export 'src/widgets/ConfirmationDialog.dart';
+export 'src/widgets/DotIndicator.dart';
+export 'src/widgets/DottedBorderWidget.dart';
+export 'src/widgets/GradientBorder.dart';
+export 'src/widgets/HorizontalList.dart';
+export 'src/widgets/HoverWidget.dart';
+export 'src/widgets/LanguageListWidget.dart';
+export 'src/widgets/Loader.dart';
+export 'src/widgets/Marquee.dart';
+export 'src/widgets/OverlayCustomWidget.dart';
 export 'src/widgets/PersistentTabs.dart';
-export 'src/widgets/animatedList/animated_configurations.dart';
-export 'src/widgets/animatedList/animated_list_view.dart';
-export 'src/widgets/animatedList/animated_scroll_view.dart';
-export 'src/widgets/animatedList/animated_wrap.dart';
-export 'src/widgets/app_button.dart';
-export 'src/widgets/app_text_field.dart';
-export 'src/widgets/blur_widget.dart';
-export 'src/widgets/circular_progress_gradient.dart';
-export 'src/widgets/dot_indicator.dart';
-export 'src/widgets/dotted_border_widget.dart';
-export 'src/widgets/gradient_border.dart';
-export 'src/widgets/horizontal_list.dart';
-export 'src/widgets/hover_widget.dart';
-export 'src/widgets/language_list_widget.dart';
-export 'src/widgets/loader_widget.dart';
-export 'src/widgets/marquee_widget.dart';
-export 'src/widgets/overlay_custom_widget.dart';
-export 'src/widgets/placeholder_widget.dart';
-export 'src/widgets/rating_bar_widget.dart';
-export 'src/widgets/read_more_text.dart';
-export 'src/widgets/responsive_widget.dart';
-export 'src/widgets/rich_text_widget.dart';
-export 'src/widgets/rounded_checkbox_widget.dart';
-export 'src/widgets/setting_item_widget.dart';
-export 'src/widgets/setting_section.dart';
-export 'src/widgets/size_listener.dart';
-export 'src/widgets/snap_helper_widget.dart';
-export 'src/widgets/text_icon_widget.dart';
-export 'src/widgets/theme_widget.dart';
-export 'src/widgets/timer_widget.dart';
-export 'src/widgets/ul_widget.dart';
-export 'src/widgets/version_info_widget.dart';
+export 'src/widgets/RatingBarWidget.dart';
+export 'src/widgets/Responsive.dart';
+export 'src/widgets/RichTextWidget.dart';
+export 'src/widgets/SettingItemWidget.dart';
+export 'src/widgets/SettingSection.dart';
+export 'src/widgets/SnapHelperWidget.dart';
+export 'src/widgets/TextIcon.dart';
+export 'src/widgets/ThemeWidget.dart';
+export 'src/widgets/ULWidget.dart';
 export 'src/widgets/widgets.dart';
+export 'src/widgets/GradientBorder.dart';
 
 //region Global variables - This variables can be changed.
 Color textPrimaryColorGlobal = textPrimaryColor;
@@ -137,27 +123,17 @@ String defaultCurrencySymbol = currencyRupee;
 LanguageDataModel? selectedLanguageDataModel;
 List<LanguageDataModel> localeLanguageList = [];
 
-bool forceEnableDebug = false;
-
 // Toast Config
 Color defaultToastBackgroundColor = Colors.grey.shade200;
 Color defaultToastTextColor = Colors.black;
 ToastGravity defaultToastGravityGlobal = ToastGravity.CENTER;
 BorderRadius defaultToastBorderRadiusGlobal = radius(30);
-
-PageRouteAnimation? pageRouteAnimationGlobal;
-Duration pageRouteTransitionDurationGlobal = 400.milliseconds;
 //endregion
-
-final navigatorKey = GlobalKey<NavigatorState>();
-
-get getContext => navigatorKey.currentState?.overlay?.context;
 
 // Must be initialize before using shared preference
 Future<void> initialize({
   double? defaultDialogBorderRadius,
   List<LanguageDataModel>? aLocaleLanguageList,
-  String? defaultLanguage,
 }) async {
   sharedPreferences = await SharedPreferences.getInstance();
 
@@ -168,11 +144,9 @@ Future<void> initialize({
 
   localeLanguageList = aLocaleLanguageList ?? [];
 
-  selectedLanguageDataModel =
-      getSelectedLanguageModel(defaultLanguage: defaultLanguage);
+  selectedLanguageDataModel = getSelectedLanguageModel();
 }
 
-/// nb_utils class
 class NBUtils {
   static const MethodChannel _channel = const MethodChannel('nb_utils');
 
@@ -180,30 +154,4 @@ class NBUtils {
     final String? version = await _channel.invokeMethod('getPlatformVersion');
     return version;
   }
-}
-
-/// Redirect to given widget without context
-Future<T?> push<T>(
-  Widget widget, {
-  bool isNewTask = false,
-  PageRouteAnimation? pageRouteAnimation,
-  Duration? duration,
-}) async {
-  if (isNewTask) {
-    return await Navigator.of(getContext).pushAndRemoveUntil(
-      buildPageRoute(
-          widget, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
-      (route) => false,
-    );
-  } else {
-    return await Navigator.of(getContext).push(
-      buildPageRoute(
-          widget, pageRouteAnimation ?? pageRouteAnimationGlobal, duration),
-    );
-  }
-}
-
-/// Dispose current screen or close current dialog
-void pop([Object? object]) {
-  if (Navigator.canPop(getContext)) Navigator.pop(getContext, object);
 }

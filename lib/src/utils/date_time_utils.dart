@@ -1,32 +1,17 @@
-import 'package:nb_utils/nb_utils.dart';
+import '../../nb_utils.dart';
 
 extension DateTimeExt on DateTime {
   /// Returns Time Ago
   String get timeAgo => formatTime(this.millisecondsSinceEpoch);
 
   /// Returns true if given date is today
-  bool get isToday {
-    final now = DateTime.now();
-    final today = DateTime(now.year, now.month, now.day);
-
-    return DateTime(this.year, this.month, this.day) == today;
-  }
+  bool get isToday => DateTime.now().day == this.day;
 
   /// Returns true if given date is yesterday
-  bool get isYesterday {
-    final now = DateTime.now();
-    final yesterday = DateTime(now.year, now.month, now.day - 1);
-
-    return DateTime(this.year, this.month, this.day) == yesterday;
-  }
+  bool get isYesterday => DateTime.now().subtract(1.days).day == this.day;
 
   /// Returns true if given date is tomorrow
-  bool get isTomorrow {
-    final now = DateTime.now();
-    final tomorrow = DateTime(now.year, now.month, now.day + 1);
-
-    return DateTime(this.year, this.month, this.day) == tomorrow;
-  }
+  bool get isTomorrow => DateTime.now().add(1.days).day == this.day;
 }
 
 /// return current time in milliseconds

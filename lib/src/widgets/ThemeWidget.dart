@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/constants.dart';
+import 'package:nb_utils/src/widgets/SettingItemWidget.dart';
 
 enum ThemeModes { SystemDefault, Light, Dark }
 
-// ThemeWidget
 class ThemeWidget extends StatefulWidget {
   final ScrollPhysics? scrollPhysics;
   final void Function(int)? onThemeChanged;
   final String? subTitle;
   final Widget? trailing;
-  final EdgeInsets? padding;
 
   ThemeWidget({
     this.scrollPhysics,
     this.onThemeChanged,
     this.subTitle,
     this.trailing,
-    this.padding,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   _ThemeWidgetState createState() => _ThemeWidgetState();
@@ -45,7 +43,6 @@ class _ThemeWidgetState extends State<ThemeWidget> {
     return ListView.builder(
       itemCount: ThemeModes.values.length,
       physics: widget.scrollPhysics,
-      padding: widget.padding ?? EdgeInsets.zero,
       shrinkWrap: true,
       itemBuilder: (context, index) {
         return SettingItemWidget(

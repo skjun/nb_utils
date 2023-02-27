@@ -40,13 +40,12 @@ class LanguageDataModel {
   }
 }
 
-LanguageDataModel? getSelectedLanguageModel({String? defaultLanguage}) {
+LanguageDataModel? getSelectedLanguageModel({String defaultLanguage = 'en'}) {
   LanguageDataModel? data;
 
   localeLanguageList.forEach((element) {
     if (element.languageCode ==
-        getStringAsync(SELECTED_LANGUAGE_CODE,
-            defaultValue: defaultLanguage ?? 'en')) {
+        getStringAsync(SELECTED_LANGUAGE_CODE, defaultValue: defaultLanguage)) {
       data = element;
     }
   });

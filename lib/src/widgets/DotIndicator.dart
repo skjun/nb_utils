@@ -33,8 +33,7 @@ class DotIndicator<T> extends StatefulWidget {
     this.boxShape,
     this.borderRadius,
     this.currentBorderRadius,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   DotIndicatorState createState() => DotIndicatorState();

@@ -1,20 +1,30 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:connectivity/connectivity.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-/// returns true if network is available
+/// return true if network is available
 Future<bool> isNetworkAvailable() async {
-  var connectivityResult = await Connectivity().checkConnectivity();
-  return connectivityResult != ConnectivityResult.none;
+  if (isMobile || isMacOS || isWeb) {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    return connectivityResult == ConnectivityResult.mobile ||
+        connectivityResult == ConnectivityResult.wifi;
+  }
+  return true;
 }
 
-/// returns true if connected to mobile
+/// return true if connected to mobile
 Future<bool> isConnectedToMobile() async {
-  var connectivityResult = await Connectivity().checkConnectivity();
-  return connectivityResult == ConnectivityResult.mobile;
+  if (isMobile || isMacOS || isWeb) {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    return connectivityResult == ConnectivityResult.mobile;
+  }
+  return true;
 }
 
-/// returns true if connected to wifi
+/// return true if connected to wifi
 Future<bool> isConnectedToWiFi() async {
-  var connectivityResult = await Connectivity().checkConnectivity();
-  return connectivityResult == ConnectivityResult.wifi;
+  if (isMobile || isMacOS || isWeb) {
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    return connectivityResult == ConnectivityResult.wifi;
+  }
+  return true;
 }

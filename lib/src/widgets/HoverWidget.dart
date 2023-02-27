@@ -3,16 +3,11 @@ import 'package:flutter/material.dart';
 typedef BoolWidgetBuilder = Widget Function(
     BuildContext context, bool isHovering);
 
-/// Hover Widget is useful is web platform
 class HoverWidget extends StatefulWidget {
   final BoolWidgetBuilder builder;
   final bool? opaque;
 
-  HoverWidget({
-    required this.builder,
-    this.opaque,
-    Key? key,
-  }) : super(key: key);
+  HoverWidget({required this.builder, this.opaque});
 
   @override
   _HoverWidgetState createState() => _HoverWidgetState();

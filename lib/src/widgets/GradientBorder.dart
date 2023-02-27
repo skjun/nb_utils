@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
 
-// GradientBorder
 class GradientBorder extends StatelessWidget {
   final Gradient gradient;
   final Widget child;
@@ -16,8 +15,7 @@ class GradientBorder extends StatelessWidget {
     this.borderRadius,
     this.padding = 0,
     splashColor,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

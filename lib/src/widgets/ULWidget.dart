@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
 
 enum SymbolType { Bullet, Numbered, Custom }
 
@@ -25,8 +26,7 @@ class UL extends StatelessWidget {
     this.customSymbol,
     this.prefixText,
     this.edgeInsets,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

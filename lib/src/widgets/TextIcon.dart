@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
 
-// TextIcon
 class TextIcon extends StatelessWidget {
   final String? text;
   final TextStyle? textStyle;
@@ -23,8 +23,7 @@ class TextIcon extends StatelessWidget {
     this.onTap,
     this.edgeInsets,
     this.expandedText,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

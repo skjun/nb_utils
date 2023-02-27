@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:nb_utils/nb_utils.dart';
+import 'package:nb_utils/src/utils/text_styles.dart';
 
 /// Default App Button
 class AppButton extends StatefulWidget {
@@ -13,7 +15,6 @@ class AppButton extends StatefulWidget {
   final Color? hoverColor;
   final Color? splashColor;
   final EdgeInsetsGeometry? padding;
-  final EdgeInsetsGeometry? margin;
   final TextStyle? textStyle;
   final ShapeBorder? shapeBorder;
   final Widget? child;
@@ -29,7 +30,6 @@ class AppButton extends StatefulWidget {
     this.color,
     this.textColor,
     this.padding,
-    this.margin,
     this.textStyle,
     this.shapeBorder,
     this.child,
@@ -41,8 +41,7 @@ class AppButton extends StatefulWidget {
     this.hoverColor,
     this.splashColor,
     this.enableScaleAnimation,
-    Key? key,
-  }) : super(key: key);
+  });
 
   @override
   _AppButtonState createState() => _AppButtonState();
@@ -79,7 +78,7 @@ class _AppButtonState extends State<AppButton>
 
   @override
   Widget build(BuildContext context) {
-    if (_controller != null && widget.enabled.validate(value: true)) {
+    if (_controller != null) {
       _scale = 1 - _controller!.value;
     }
 
@@ -103,34 +102,30 @@ class _AppButtonState extends State<AppButton>
   }
 
   Widget buildButton() {
-    return Padding(
-      padding: widget.margin ?? EdgeInsets.zero,
-      child: MaterialButton(
-        minWidth: widget.width,
-        padding: widget.padding ?? dynamicAppButtonPadding(context),
-        onPressed: widget.enabled.validate(value: true)
-            ? widget.onTap != null
-                ? widget.onTap as void Function()?
-                : null
-            : null,
-        color: widget.color ?? appButtonBackgroundColorGlobal,
-        child: widget.child ??
-            Text(
-              widget.text.validate(),
-              style: widget.textStyle ??
-                  boldTextStyle(
-                    color: widget.textColor ?? defaultAppButtonTextColorGlobal,
-                  ),
-            ),
-        shape: widget.shapeBorder ?? defaultAppButtonShapeBorder,
-        elevation: widget.elevation ?? defaultAppButtonElevation,
-        animationDuration: Duration(milliseconds: 300),
-        height: widget.height,
-        disabledColor: widget.disabledColor,
-        focusColor: widget.focusColor,
-        hoverColor: widget.hoverColor,
-        splashColor: widget.splashColor,
-      ),
+    return MaterialButton(
+      minWidth: widget.width,
+      padding:
+          widget.padding ?? EdgeInsets.symmetric(vertical: 14, horizontal: 16),
+      onPressed: widget.enabled.validate(value: true)
+          ? widget.onTap as void Function()?
+          : null,
+      color: widget.color ?? appButtonBackgroundColorGlobal,
+      child: widget.child ??
+          Text(
+            widget.text.validate(),
+            style: widget.textStyle ??
+                boldTextStyle(
+                  color: widget.textColor ?? defaultAppButtonTextColorGlobal,
+                ),
+          ),
+      shape: widget.shapeBorder ?? defaultAppButtonShapeBorder,
+      elevation: widget.elevation ?? defaultAppButtonElevation,
+      animationDuration: Duration(milliseconds: 300),
+      height: widget.height,
+      disabledColor: widget.disabledColor,
+      focusColor: widget.focusColor,
+      hoverColor: widget.hoverColor,
+      splashColor: widget.splashColor,
     );
   }
 }
